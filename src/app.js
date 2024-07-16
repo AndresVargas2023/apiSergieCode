@@ -13,6 +13,7 @@ app.use(bodyParser.json()) // Parseador de Bodies
 // Acá conectaremos la base de datos:
 mongoose.connect(process.env.MONGODB_URI, {
   dbName: process.env.MONGO_DB_NAME,
+  serverSelectionTimeoutMS: 50000, 
   ssl: true
   
 })
