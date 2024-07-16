@@ -10,8 +10,15 @@ const bookRoutes = require('./routes/book.routes')
 const app = express();
 app.use(bodyParser.json()) // Parseador de Bodies
 
-//Acá conectaremos la base de datos:
-mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.MONGO_DB_NAME })
+// Acá conectaremos la base de datos:
+mongoose.connect(process.env.MONGODB_URI, {
+  dbName: process.env.MONGO_DB_NAME,
+  ssl: true
+  
+})
+.then(() => console.log('Conexión a MongoDB exitosa'))
+.catch(err => console.error('Error al conectar a MongoDB:', err));
+
 const db = mongoose.connection;
 
 app.use('/books', bookRoutes)
