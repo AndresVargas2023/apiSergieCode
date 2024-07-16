@@ -6,7 +6,6 @@ config()
 
 const bookRoutes = require('./routes/book.routes')
 
-// Usamos express para los middlewares 
 const app = express();
 app.use(bodyParser.json()) // Parseador de Bodies
 
