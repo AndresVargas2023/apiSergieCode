@@ -53,48 +53,51 @@ router.get('/', async (req, res) => {
 
 // Crear un nuevo libro (recurso) [POST]
 router.post('/', async (req, res) => {
-    const { title, author, genre, publication_date } = req?.body
+    const { title, author, genre, publication_date, image_url, download_url, description } = req.body;
     if (!title || !author || !genre || !publication_date) {
         return res.status(400).json({
-            message: 'Los campos título, autor, género y fecha son obligatorios'
+            message: 'Los campos título, autor, género y fecha de publicación son obligatorios'
         })
     }
 
-    const book = new Book(
-        {
-            title,
-            author,
-            genre,
-            publication_date
-        }
-    )
+    const book = new Book({
+        title,
+        author,
+        genre,
+        publication_date,
+        image_url,
+        download_url,
+        description
+    })
 
     try {
-        const newBook = await book.save()
-        console.log(newBook)
-        res.status(201).json(newBook)
+        const newBook = await book.save();
+        console.log(newBook);
+        res.status(201).json(newBook);
     } catch (error) {
         res.status(400).json({
             message: error.message
         })
     }
-
 })
 
-router.get('/:id', getBook, async (req, res) => {
+router.get('/:id', getBook, (req, res) => {
     res.json(res.book);
 })
 
 router.put('/:id', getBook, async (req, res) => {
     try {
-        const book = res.book
+        const book = res.book;
         book.title = req.body.title || book.title;
         book.author = req.body.author || book.author;
         book.genre = req.body.genre || book.genre;
         book.publication_date = req.body.publication_date || book.publication_date;
+        book.image_url = req.body.image_url || book.image_url;
+        book.download_url = req.body.download_url || book.download_url;
+        book.description = req.body.description || book.description;
 
-        const updatedBook = await book.save()
-        res.json(updatedBook)
+        const updatedBook = await book.save();
+        res.json(updatedBook);
     } catch (error) {
         res.status(400).json({
             message: error.message
@@ -103,23 +106,24 @@ router.put('/:id', getBook, async (req, res) => {
 })
 
 router.patch('/:id', getBook, async (req, res) => {
-
-    if (!req.body.title && !req.body.author && !req.body.genre && !req.body.publication_date) {
+    if (!req.body.title && !req.body.author && !req.body.genre && !req.body.publication_date && !req.body.image_url && !req.body.download_url && !req.body.description) {
         res.status(400).json({
-            message: 'Al menos uno de estos campos debe ser enviado: Título, Autor, Género o fecha de publicación'
+            message: 'Al menos uno de estos campos debe ser enviado: Título, Autor, Género, Fecha de Publicación, URL de Imagen, URL de Descarga o Descripción'
         })
-
     }
 
     try {
-        const book = res.book
+        const book = res.book;
         book.title = req.body.title || book.title;
         book.author = req.body.author || book.author;
         book.genre = req.body.genre || book.genre;
         book.publication_date = req.body.publication_date || book.publication_date;
+        book.image_url = req.body.image_url || book.image_url;
+        book.download_url = req.body.download_url || book.download_url;
+        book.description = req.body.description || book.description;
 
-        const updatedBook = await book.save()
-        res.json(updatedBook)
+        const updatedBook = await book.save();
+        res.json(updatedBook);
     } catch (error) {
         res.status(400).json({
             message: error.message
@@ -129,7 +133,7 @@ router.patch('/:id', getBook, async (req, res) => {
 
 router.delete('/:id', getBook, async (req, res) => {
     try {
-        const book = res.book
+        const book = res.book;
         await book.deleteOne({
             _id: book._id
         });
@@ -143,5 +147,4 @@ router.delete('/:id', getBook, async (req, res) => {
     }
 })
 
-
-module.exports = router
+module.exports = router;
